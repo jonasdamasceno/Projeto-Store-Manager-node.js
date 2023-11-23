@@ -17,4 +17,9 @@ describe('testa as funçoes da camada service', function () {
     const result = await getAllProducts();
     expect(result).to.be.deep.equal(allProducts);
   });
+  it('testa a função getProductsById', async function () {
+    sinon.stub(models.products, 'getProductsById').resolves(allProducts);
+    const result = await getProductsById();
+    expect(result).to.be.deep.equal(allProducts);
+  });
 });
