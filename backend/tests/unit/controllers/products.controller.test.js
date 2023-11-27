@@ -1,4 +1,4 @@
-const { expect, use } = require('chai');
+const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const services = require('../../../src/services');
@@ -7,9 +7,10 @@ const {
   getProductsById,
 } = require('../../../src/controllers/products.controller');
 
-use(sinonChai);
+const { expect } = chai;
+chai.use(sinonChai);
 
-describe('products.controller()', function () {
+describe('testa as funçoes da camada controller', function () {
   let res;
   beforeEach(function () {
     res = {
@@ -17,9 +18,11 @@ describe('products.controller()', function () {
       json: sinon.stub(),
     };
   });
-  afterEach(sinon.restore);
+  afterEach(function () {
+    sinon.restore();
+  });
 
-  it('testa o retorno da função getAllProducts na camada controller', async function () {
+  it.only('testa o retorno da função getAllProducts na camada controller', async function () {
     const expectedResult = [
       { id: 1, name: 'Product 1' },
       { id: 2, name: 'Product 2' },
