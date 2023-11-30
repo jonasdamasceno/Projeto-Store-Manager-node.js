@@ -5,7 +5,8 @@ const services = require('../../../src/services');
 const {
   getAllProducts,
   getProductsById,
-} = require('../../../src/controllers/products.controller');
+} = require('../../../src/controllers/product.controller');
+// const { products } = require('../../../src/models');
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -22,7 +23,7 @@ describe('testa as funçoes da camada controller', function () {
     sinon.restore();
   });
 
-  it.only('testa o retorno da função getAllProducts na camada controller', async function () {
+  it('testa o retorno da função getAllProducts na camada controller', async function () {
     const expectedResult = [
       { id: 1, name: 'Product 1' },
       { id: 2, name: 'Product 2' },
@@ -33,12 +34,14 @@ describe('testa as funçoes da camada controller', function () {
     expect(res.json).to.have.been.calledOnceWith(expectedResult);
   });
   it('testa o retorno da função getProductsById na camada controller', async function () {
-    const expectedResult = { id: 3, name: 'Product 3' };
-    sinon.stub(services.products, 'getProductsById').resolves(expectedResult);
-    const req = { params: { id: 3 } };
+    const product = { id: 1, name: 'Martelo de Thor' };
+    sinon
+      .stub(services.products, 'getProductsById')
+      .resolves({ status: 'SUCCES', data: product });
+    const req = { params: { id: 1 }, body: {} };
     await getProductsById(req, res);
-    expect(res.status).to.have.been.calledOnceWith(200);
-    expect(res.json).to.have.been.calledOnceWith(expectedResult);
+    expect(res.status).to.have.been.calledWith(200);
+    expect(res.json).to.have.been.calledWith(product);
   });
   it('testa se o status 404 é exibido se a função nao encontra um id', async function () {
     sinon.stub(services.products, 'getProductsById').resolves(undefined);

@@ -8,8 +8,8 @@ JOIN sales AS S ON SP.sale_id = S.id;`;
   return resposta;
 };
 
-const getProductsById = async () => {
-	const query = 
-};
+// const getProductsById = async () => {
+// const query = 
+// };
 
 module.exports = { getAllProducts };
