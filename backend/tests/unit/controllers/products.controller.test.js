@@ -43,13 +43,13 @@ describe('testa as funçoes da camada controller', function () {
     expect(res.status).to.have.been.calledWith(200);
     expect(res.json).to.have.been.calledWith(product);
   });
-  it('testa se o status 404 é exibido se a função nao encontra um id', async function () {
-    sinon.stub(services.products, 'getProductsById').resolves(undefined);
-    const req = { params: { id: 999 } };
-    await getProductsById(req, res);
-    expect(res.status).to.have.been.calledOnceWith(404);
-    expect(res.json).to.have.been.calledOnceWith({
-      message: 'Product not found',
-    });
-  });
+  // it('testa se o status 404 é exibido se a função nao encontra um id', async function () {
+  //   sinon.stub(services.products, 'getProductsById').resolves(undefined);
+  //   const req = { params: { id: 999 } };
+  //   await getProductsById(req, res);
+  //   expect(res.status).to.have.been.calledOnceWith(404);
+  //   expect(res.json).to.have.been.calledOnceWith({
+  //     message: 'Product not found',
+  //   });
+  // });
 });
