@@ -1,4 +1,4 @@
-const camelize = require('camelize');
+const camelize = require('../utils/camelize');
 const connection = require('../connection/connection');
 
 const getAllSales = async () => {
