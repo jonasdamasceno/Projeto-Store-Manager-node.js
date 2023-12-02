@@ -8,6 +8,7 @@ JOIN sales AS S ON SP.sale_id = S.id;`;
   const [resposta] = await connection.execute(query);
   return camelize(resposta);
 };
+console.log(getAllSales);
 
 const getSalesById = async (id) => {
   const query = `SELECT sp.product_id, sp.quantity, s.date

@@ -15,7 +15,6 @@ const create = async (name) => {
 
 module.exports = {
   getAllProducts,
-  // getProductsById,
   create,
   getProductsById,
 };
