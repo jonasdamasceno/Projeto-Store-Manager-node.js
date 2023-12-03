@@ -18,7 +18,7 @@ const getProductsById = async (req, res) => {
   res.status(HTTPMap(status)).json(data);
 };
 const create = async (req, res) => {
-  const { name } = req.body;
+  const name = req.body;
   const result = await products.create(name);
   res.status(201).json(result);
 };

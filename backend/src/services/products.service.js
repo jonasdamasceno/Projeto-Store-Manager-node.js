@@ -7,7 +7,6 @@ const getProductsById = async (id) => {
   if (!product) return { status: 'NOT_FOUND', data: { message: 'Product not found' } };
   return { status: 'SUCCES', data: product };
 };
-
 const create = async (name) => {
   const id = await products.create(name);
   return { id, name };

@@ -2,8 +2,8 @@ const { salesService } = require('../services');
 const HTTPMap = require('../utils/generetaHTTPStatus');
 
 const getAllSales = async (req, res) => {
-  const result = await salesService.getAllSalesService();
-  res.status(200).json(result);
+  const { status, data } = await salesService.getAllSalesService();
+  return res.status(HTTPMap(status)).json(data);
 };
 
 // const getSaleById = async (req, res) => {
