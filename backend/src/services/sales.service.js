@@ -1,29 +1,37 @@
-const { salesModel } = require('../models/sales.model');
-
+const { getAllSales, getSalesById } = require('../models/sales.model');
 // const getAllSales = async () => {
 //   const sales = await getAllSales();
 //   if
 // }
 
-const getAllSales = async () => {
-  const sales = await salesModel.getAllSales();
+const getAllSalesService = async () => {
+  const sales = await getAllSales();
 
-  if (!sales.length) {
-    return Promise.resolve({ status: 'NOT_FOUND', data: { message: 'No sales found' } });
-  }
-
-  return Promise.resolve({ status: 'SUCCESS', data: sales });
+  if (!sales) return { status: 'NOT_FOUND', data: { message: 'Not found sales' } };
+  return { status: 'SUCCES', data: sales };
 };
 
-const getSalesById = async () => {
-  const sales = await salesModel.getSalesById();
+const getSaleByIdService = async (id) => {
+  const sales = await getSalesById(id);
   if (sales.length === 0) { 
-    return Promise.resolve({ status: 'NOT_FOUND', data: { message: 'sale not found' } }); 
+    return { status: 'NOT_FOUND', data: { message: 'Sale not found' } }; 
   }
-  return Promise.resolve({ status: 'SUCCES', data: sales });
+  return { status: 'SUCCES', data: sales };
 };
+
+// const getAllSalesService = async (req, res) => {
+//   const sales = await getAllSales();
+//   res.status(200).json(sales);
+// };
+
+// const getSaleByIdService = async (req, res) => {
+//   const { id } = await req.params;
+//   const sales = await getSalesById(id);
+//   if (!sales.length) return res.status(404).json({ message: 'Sale not found' });
+//   res.status(200).json(sales);
+// };
 
 module.exports = {
-  getAllSales,
-  getSalesById,
+  getAllSalesService,
+  getSaleByIdService,
 };

@@ -1,14 +1,21 @@
-const salesService = require('../services');
+const { salesService } = require('../services');
 const HTTPMap = require('../utils/generetaHTTPStatus');
 
 const getAllSales = async (req, res) => {
-  const result = await salesService.getAllSales();
+  const result = await salesService.getAllSalesService();
   res.status(200).json(result);
 };
 
+// const getSaleById = async (req, res) => {
+//   const { id } = req.params;
+//   const result = await salesService.getSaleById(id);
+//   if (!result.length) return res.status(404).json({ message: 'Sale not found' });
+//   res.status(200).json(result);
+// };
+
 const getSaleById = async (req, res) => {
   const { id } = req.params;
-  const { status, data } = await salesService.getSaleById(id);
+  const { status, data } = await salesService.getSaleByIdService(id);
   return res.status(HTTPMap(status)).json(data);
 };
 
