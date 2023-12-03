@@ -27,7 +27,7 @@ describe('testa as funçoes sales da camada model', function () {
   });
   it('verifica o retorno de uma venda atraves do id', async function () {
     sinon.stub(connection, 'execute').resolves([expectedResultById]);
-    const resultModel = await salesModel.getSalesById(4);
+    const resultModel = await salesModel.getSalesById(1);
     expect(resultModel).to.be.deep.equal(expectedResultById);
   });
 });
