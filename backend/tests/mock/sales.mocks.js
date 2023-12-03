@@ -23,6 +23,19 @@ const salesMock = [
   },
 ];
 
+const expectedResultById = [
+  {
+    saleId: 1,
+    quantity: 5,
+    date: dataAtualFormatada,
+  },
+  {
+    saleId: 1,
+    quantity: 10,
+    date: '2023-11-21T19:11:33.000Z',
+  },
+];
 module.exports = {
   salesMock,
+  expectedResultById,
 };
