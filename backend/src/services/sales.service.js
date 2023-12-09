@@ -19,19 +19,13 @@ const getSaleByIdService = async (id) => {
   return { status: 'SUCCES', data: sales };
 };
 
-// const getAllSalesService = async (req, res) => {
-//   const sales = await getAllSales();
-//   res.status(200).json(sales);
-// };
-
-// const getSaleByIdService = async (req, res) => {
-//   const { id } = await req.params;
-//   const sales = await getSalesById(id);
-//   if (!sales.length) return res.status(404).json({ message: 'Sale not found' });
-//   res.status(200).json(sales);
-// };
+const createSales = async (sales) => {
+  const data = salesModel.saveSalesProductsInDatabase(sales);
+  return { status: 'CREATED', data };
+};
 
 module.exports = {
   getAllSalesService,
   getSaleByIdService,
+  createSales,
 };

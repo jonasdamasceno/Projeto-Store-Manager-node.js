@@ -18,4 +18,20 @@ const getSalesById = async (id) => {
   return camelize(resposta);
 };
 
-module.exports = { getAllSales, getSalesById };
+const saveSalesProductsInDatabase = async (sales, insertId) => {
+  let salesProductsQueries = [];
+  
+  if (sales && sales.length > 0) {
+    const query = `INSERT INTO sales_products (sale_id, product_id, quantity) 
+        VALUES (?, ?, ?);`;
+    salesProductsQueries = sales.map(({ productId, quantity }) => connection
+      .execute(query, [insertId, productId, quantity]));
+    await Promise.all(salesProductsQueries);
+  }
+};
+
+module.exports = { 
+  getAllSales, 
+  getSalesById,
+  saveSalesProductsInDatabase,
+};
