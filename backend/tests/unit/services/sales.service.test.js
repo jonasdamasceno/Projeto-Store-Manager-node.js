@@ -18,4 +18,14 @@ describe('testa o endpoint de vendas na camada service', function () {
     expect(responseServiceById.status).to.equal('SUCCES');
     expect(responseServiceById.data).to.deep.equal(expectedResultById);
   });
+  it('testa a falha na busca por um id inexistente', async function () {
+    sinon.stub(salesModel, 'getSalesById').resolves([]);
+    const responseServiceById = await salesService.getSaleByIdService(999);
+    expect(responseServiceById).to.deep.include({
+      status: 'NOT_FOUND',
+      data: { message: 'Sale not found' },
+    });
+  //   expect(responseServiceById.status).to.equal('NOT_FOUND');
+  //   expect(responseServiceById.data).to.deep.equal('Sale not found');
+  });
 });
