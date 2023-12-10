@@ -1,5 +1,6 @@
 const camelize = require('camelize');
 const connection = require('../connection/connection');
+const generateDate = require('../utils/generationData');
 
 const getAllSales = async () => {
   const query = `SELECT SP.sale_id, SP.product_id, SP.quantity, S.date
@@ -19,8 +20,12 @@ const getSalesById = async (id) => {
 };
 
 const saveSalesProductsInDatabase = async (sales, insertId) => {
+  if (insertId === undefined) {
+    console.error('O parâmetro "insertId" está indefinido.');
+    return;
+  }
+
   let salesProductsQueries = [];
-  
   if (sales && sales.length > 0) {
     const query = `INSERT INTO sales_products (sale_id, product_id, quantity) 
         VALUES (?, ?, ?);`;
@@ -30,8 +35,15 @@ const saveSalesProductsInDatabase = async (sales, insertId) => {
   }
 };
 
+const createAndSaveNewSale = async (sales) => {
+  const query = 'INSERT INTO sales (date) VALUES (?);';
+  const [{ insertId }] = await connection.execute(query, [generateDate()]);
+  await saveSalesProductsInDatabase(sales, insertId);
+  return { id: insertId, itemsSold: sales };
+};
+
 module.exports = { 
   getAllSales, 
   getSalesById,
-  saveSalesProductsInDatabase,
+  createAndSaveNewSale,
 };

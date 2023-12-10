@@ -21,18 +21,9 @@ const getSaleById = async (req, res) => {
 
 const handleSalesInsertion = async (req, res) => {
   const sales = req.body;
-
-  try {
-    const { status, data } = await salesService.createSales(sales);
-    res.status(HTTPMap(status)).json(data);
-  } catch (error) {
-    res.status(HTTPMap(error.status || 'INTERNAL_SERVER_ERROR'))
-      .json(error.data || { message: 'Internal Server Error' });
-  }
+  const { status, data } = await salesService.createAndInsertSales(sales);
+  res.status(HTTPMap(status)).json(data);
 };
-
-const handle = handleSalesInsertion();
-console.log(handle);
 
 module.exports = {
   getAllSales,
