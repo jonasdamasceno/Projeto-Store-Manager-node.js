@@ -5,7 +5,13 @@ const services = require('../../../src/services');
 const {
   getAllProducts,
   getProductsById,
+  updateProductController,
 } = require('../../../src/controllers/product.controller');
+const {
+  statusInvalidValueName5Character,
+  statusBadRequestNameRequired,
+  statusNotFound,
+} = require('../../mock/mocks');
 // const { products } = require('../../../src/models');
 
 const { expect } = chai;
@@ -42,5 +48,54 @@ describe('testa as funçoes da camada controller', function () {
     await getProductsById(req, res);
     expect(res.status).to.have.been.calledWith(200);
     expect(res.json).to.have.been.calledWith(product);
+  });
+  // it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
+  //   sinon
+  //     .stub(services.products, 'updateProductService')
+  //     .resolves(updateStatusSuccess);
+  //   const req = {
+  //     params: { id: '1' },
+  //     body: { name: 'Marreta' },
+  //   };
+  //   await updateProductController(req, res);
+  //   expect(res.status).to.have.calledWith(200);
+  //   expect(res.json).to.have.calledWith(batmanHammerWithId);
+  // });
+  it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
+    sinon
+      .stub(services.products, 'updateProductService')
+      .resolves(statusInvalidValueName5Character);
+    const req = {
+      params: { id: '1' },
+      body: { name: 'teia' },
+    };
+    await updateProductController(req, res);
+    expect(res.status).to.have.calledWith(422);
+    expect(res.json).to.have.calledWith(sinon.match.has('message'));
+  });
+  // it('testa a funcionalidade se nao é possivel atualizar o produto sem a chave name', async function () {
+  //   sinon
+  //     .stub(services.products, 'updateProductService')
+  //     .resolves(statusBadRequestNameRequired);
+  //   const req = {
+  //     params: { id: '1' },
+  //     body: { name: 'Marreta' },
+  //   };
+  //   await updateProductController(req, res);
+  //   expect(res.status).to.have.calledWith(400);
+  //   expect(res.json).to.have.calledWith(sinon.match.has('message'));
+  // });
+
+  it('testa se é possivel atualizar um produto com id invalida', async function () {
+    sinon
+      .stub(services.products, 'updateProductService')
+      .resolves(statusNotFound);
+    const req = {
+      params: { id: '999' },
+      body: { name: 'Marreta' },
+    };
+    await updateProductController(req, res);
+    expect(res.status).to.have.calledWith(404);
+    expect(res.json).to.have.calledWith(sinon.match.has('message'));
   });
 });
