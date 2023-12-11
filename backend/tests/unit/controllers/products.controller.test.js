@@ -37,7 +37,7 @@ describe('testa as funçoes da camada controller', function () {
     const product = { id: 1, name: 'Martelo de Thor' };
     sinon
       .stub(services.products, 'getProductsById')
-      .resolves({ status: 'SUCCES', data: product });
+      .resolves({ status: 'SUCCESS', data: product });
     const req = { params: { id: 1 }, body: {} };
     await getProductsById(req, res);
     expect(res.status).to.have.been.calledWith(200);
