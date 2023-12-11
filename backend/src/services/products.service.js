@@ -59,7 +59,12 @@ const updateProductService = async (update, id) => {
 //   await products.deleteProductById(id);
 // };
 const deleteProductById = async (id) => {
-  await products.deleteProduct(id);
+  await products.deleteProductById(id);
+};
+
+const searchProductsService = async (productName) => {
+  const filteredProducts = await products.searchProducts(productName);
+  return filteredProducts;
 };
 
 module.exports = {
@@ -69,4 +74,5 @@ module.exports = {
   getProductsById,
   deleteProductById,
   updateProductService,
+  searchProductsService,
 };
