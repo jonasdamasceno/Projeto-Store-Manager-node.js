@@ -9,7 +9,7 @@ const {
 } = require('../../../src/controllers/product.controller');
 const {
   statusInvalidValueName5Character,
-  statusBadRequestNameRequired,
+  // statusBadRequestNameRequired,
   statusNotFound,
 } = require('../../mock/mocks');
 // const { products } = require('../../../src/models');
