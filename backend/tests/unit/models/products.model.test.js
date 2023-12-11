@@ -7,6 +7,7 @@ const { allProducts } = require('../../mock/mocks');
 const {
   getAllProducts,
   getProductsById,
+  create,
 } = require('../../../src/models/products.model');
 
 chai.use(sinonChai);
@@ -25,9 +26,9 @@ describe('testa as funçes da camada model', function () {
     const result = await getProductsById(3);
     expect(result).to.be.deep.equal(allProducts);
   });
-  // it('should create a product', async function () {
-  //   sinon.stub(connection, 'execute').resolves([{ insertId: 1 }]);
-  //   const result = await create('Product 1');
-  //   expect(result).to.equal(1);
-  // });
+  it('should create a product', async function () {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 1 }]);
+    const result = await create('Product 1');
+    expect(result).to.equal(1);
+  });
 });

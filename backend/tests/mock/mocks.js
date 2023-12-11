@@ -13,12 +13,7 @@ const allProducts = [
   },
 ];
 
-const generateDate = () => {
-  const data = new Date();
-  const formated = data.toISOString().slice(0, 19).replace('T', ' ');
-  return formated;
-};
-const generateDate2 = generateDate();
-console.log(generateDate2);
+const batmanHammer = { name: 'Martelo do batman' };
+const batmanHammerWithId = { name: 'Martelo do batman', id: 1 };
 
-module.exports = { allProducts, generateDate };
+module.exports = { allProducts, batmanHammer, batmanHammerWithId };

@@ -1,4 +1,5 @@
 const { products } = require('../services');
+const { updateProductService } = require('../services/products.service');
 const HTTPMap = require('../utils/generetaHTTPStatus');
 
 const getAllProducts = async (req, res) => {
@@ -17,6 +18,13 @@ const create = async (req, res) => {
   res.status(HTTPMap(status)).json(data);
 };
 
+const updateProductController = async (req, res) => {
+  const update = req.body;
+  const { id } = req.params;
+  const { status, data } = await updateProductService(update, Number(id));
+  res.status(HTTPMap(status)).json(data);
+};
+
 const removeProduct = async (req, res) => {
   const { id } = req.body;
   await products.deleteProductById(Number(id));
@@ -28,4 +36,5 @@ module.exports = {
   create,
   getProductsById,
   removeProduct,
+  updateProductController,
 };
