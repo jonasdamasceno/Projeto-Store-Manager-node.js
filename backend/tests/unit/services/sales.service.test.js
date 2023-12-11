@@ -9,13 +9,13 @@ describe('testa o endpoint de vendas na camada service', function () {
   it('testa a função getAllSalesService', async function () {
     sinon.stub(salesModel, 'getAllSales').resolves(salesMock);
     const responseService = await salesService.getAllSalesService();
-    expect(responseService.status).to.equal('SUCCES');
+    expect(responseService.status).to.equal('SUCCESS');
     expect(responseService.data).to.deep.equal(salesMock);
   });
   it('testa o retorno de uma busca feita atraves do id', async function () {
     sinon.stub(salesModel, 'getSalesById').resolves(expectedResultById);
     const responseServiceById = await salesService.getSaleByIdService(1);
-    expect(responseServiceById.status).to.equal('SUCCES');
+    expect(responseServiceById.status).to.equal('SUCCESS');
     expect(responseServiceById.data).to.deep.equal(expectedResultById);
   });
   it('testa a falha na busca por um id inexistente', async function () {

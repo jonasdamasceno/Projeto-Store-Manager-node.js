@@ -25,7 +25,7 @@ const getAllProducts = async () => products.getAllProducts();
 const getProductsById = async (id) => {
   const product = await products.getProductsById(id);
   if (!product) return { status: 'NOT_FOUND', data: { message: 'Product not found' } };
-  return { status: 'SUCCES', data: product };
+  return { status: 'SUCCESS', data: product };
 };
 const create = async (newName) => {
   const { name } = newName;
@@ -52,7 +52,7 @@ const updateProductService = async (update, id) => {
   if (error) return error;
   const { name } = update;
   await products.updateProduct(update, id);
-  return { status: 'SUCESS', data: { id, name } };
+  return { status: 'SUCCESS', data: { id, name } };
 };
 
 const deleteProductById = async (id) => {
