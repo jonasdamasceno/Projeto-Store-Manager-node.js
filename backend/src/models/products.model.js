@@ -22,7 +22,7 @@ const create = async (newName) => {
 };
 
 const deleteProductById = (id) => {
-  const query = 'DELETE FROM products WHERE id = (?)';
+  const query = 'DELETE FROM products WHERE id = ?';
   return connection.execute(query, [id]);
 };  
 

@@ -6,9 +6,7 @@ const verifyProductExists = async (req, res, next) => {
   
   const productExists = allProducts.some((product) => product.id === Number(id));
   
-  if (!productExists) {
-    return res.status(404).json({ message: 'Product not found' });
-  }
+  if (!productExists) return res.status(404).json({ message: 'Product not found' });
   
   next();
 };

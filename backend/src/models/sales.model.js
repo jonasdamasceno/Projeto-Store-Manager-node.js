@@ -43,8 +43,14 @@ const createAndSaveNewSale = async (sales) => {
   return { id: insertId, itemsSold: sales };
 };
 
+const deleteSaleById = (id) => {
+  const query = 'DELETE FROM sales WHERE id = ?';
+  return connection.execute(query, [id]);
+};  
+
 module.exports = {
   getAllSales,
   getSalesById,
   createAndSaveNewSale,
+  deleteSaleById,
 };
