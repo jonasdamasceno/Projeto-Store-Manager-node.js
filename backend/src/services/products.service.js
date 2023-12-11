@@ -39,9 +39,14 @@ const create = async (newName) => {
 //   return { status: 'CREATED', data: { id, name } };
 // };
 
+const deleteProductById = async (id) => {
+  await products.deleteProductById(id);
+};
+
 module.exports = {
   getAllProducts,
   create,
   // createNewProduct,
   getProductsById,
+  deleteProductById,
 };

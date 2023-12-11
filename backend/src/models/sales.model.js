@@ -11,11 +11,14 @@ JOIN sales AS S ON SP.sale_id = S.id;`;
 };
 
 const getSalesById = async (id) => {
-  const [resposta] = await connection.execute(`SELECT sp.product_id, sp.quantity, s.date
+  const [resposta] = await connection.execute(
+    `SELECT sp.product_id, sp.quantity, s.date
     FROM sales_products sp
       INNER JOIN sales s 
       ON sp.sale_id = s.id 
-      WHERE sale_id = (?)`, [id]);
+      WHERE sale_id = (?)`,
+    [id],
+  );
   return camelize(resposta);
 };
 
@@ -26,13 +29,11 @@ const saveSalesProductsInDatabase = async (sales, insertId) => {
   }
 
   let salesProductsQueries = [];
-  if (sales && sales.length > 0) {
-    const query = `INSERT INTO sales_products (sale_id, product_id, quantity) 
+  const query = `INSERT INTO sales_products (sale_id, product_id, quantity) 
         VALUES (?, ?, ?);`;
-    salesProductsQueries = sales.map(({ productId, quantity }) => connection
-      .execute(query, [insertId, productId, quantity]));
-    await Promise.all(salesProductsQueries);
-  }
+  salesProductsQueries = sales.map(({ productId, quantity }) =>
+    connection.execute(query, [insertId, productId, quantity]));
+  await Promise.all(salesProductsQueries);
 };
 
 const createAndSaveNewSale = async (sales) => {
@@ -42,8 +43,8 @@ const createAndSaveNewSale = async (sales) => {
   return { id: insertId, itemsSold: sales };
 };
 
-module.exports = { 
-  getAllSales, 
+module.exports = {
+  getAllSales,
   getSalesById,
   createAndSaveNewSale,
 };

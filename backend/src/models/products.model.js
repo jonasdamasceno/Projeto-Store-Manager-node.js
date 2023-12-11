@@ -21,8 +21,14 @@ const create = async (newName) => {
   return insertId;
 };
 
+const deleteProductById = (id) => {
+  const query = 'DELETE FROM products WHERE id = (?)';
+  return connection.execute(query, [id]);
+};  
+
 module.exports = {
   getAllProducts,
   create,
   getProductsById,
+  deleteProductById,
 };
