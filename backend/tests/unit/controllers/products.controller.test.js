@@ -6,11 +6,15 @@ const {
   getAllProducts,
   getProductsById,
   updateProductController,
+  create,
 } = require('../../../src/controllers/product.controller');
 const {
   statusInvalidValueName5Character,
   // statusBadRequestNameRequired,
   statusNotFound,
+  standardProduct,
+  statusCreateNewProduct,
+  statusBadRequestNameRequired,
 } = require('../../mock/mocks');
 // const { products } = require('../../../src/models');
 
@@ -36,6 +40,7 @@ describe('testa as funçoes da camada controller', function () {
     ];
     sinon.stub(services.products, 'getAllProducts').resolves(expectedResult);
     await getAllProducts(undefined, res);
+
     expect(res.status).to.have.been.calledOnceWith(200);
     expect(res.json).to.have.been.calledOnceWith(expectedResult);
   });
@@ -83,7 +88,7 @@ describe('testa as funçoes da camada controller', function () {
   //   };
   //   await updateProductController(req, res);
   //   expect(res.status).to.have.calledWith(400);
-  //   expect(res.json).to.have.calledWith(sinon.match.has('message'));
+  //   expect(res.j son).to.have.calledWith(sinon.match.has('message'));
   // });
 
   it('testa se é possivel atualizar um produto com id invalida', async function () {
@@ -96,6 +101,26 @@ describe('testa as funçoes da camada controller', function () {
     };
     await updateProductController(req, res);
     expect(res.status).to.have.calledWith(404);
+    expect(res.json).to.have.calledWith(sinon.match.has('message'));
+  });
+  it('testa o endpoint de cadastrar um novo produto', async function () {
+    sinon.stub(services.products, 'create').resolves(statusCreateNewProduct);
+    const req = {
+      params: {},
+      body: { name: 'Marreta' },
+    };
+    await create(req, res);
+    expect(res.status).to.have.calledWith(201);
+    expect(res.json).to.have.calledWith(standardProduct);
+  });
+  it('testa a falha ao tentar criar um novo produto', async function () {
+    sinon.stub(services.products, 'create').resolves(statusBadRequestNameRequired);
+    const req = {
+      params: {},
+      body: { name: 'Marreta' },
+    };
+    await create(req, res);
+    expect(res.status).to.have.calledWith(400);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
   });
 });

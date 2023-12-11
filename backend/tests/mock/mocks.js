@@ -13,8 +13,11 @@ const allProducts = [
   },
 ];
 
+const standardProduct = { name: 'Marreta', id: 1 };
 const batmanHammer = { name: 'Martelo do batman' };
 const batmanHammerWithId = { name: 'Martelo do batman', id: 1 };
+const statusCreateNewProduct = { status: 'CREATED', data: standardProduct };
+
 const updateStatusSuccess = {
   status: 'SUCCESS',
   data: batmanHammerWithId,
@@ -33,11 +36,14 @@ const statusNotFound = {
   data: { message: 'Product not found' },
 };
 
-module.exports = { allProducts, 
-  batmanHammer, 
-  batmanHammerWithId, 
-  updateStatusSuccess, 
+module.exports = {
+  allProducts,
+  batmanHammer,
+  batmanHammerWithId,
+  updateStatusSuccess,
   statusInvalidValueName5Character,
   statusBadRequestNameRequired,
   statusNotFound,
+  standardProduct,
+  statusCreateNewProduct,
 };

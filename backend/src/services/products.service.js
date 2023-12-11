@@ -55,8 +55,11 @@ const updateProductService = async (update, id) => {
   return { status: 'SUCCESS', data: { id, name } };
 };
 
+// const deleteProductById = async (id) => {
+//   await products.deleteProductById(id);
+// };
 const deleteProductById = async (id) => {
-  await products.deleteProductById(id);
+  await products.deleteProduct(id);
 };
 
 module.exports = {

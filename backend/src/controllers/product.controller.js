@@ -25,8 +25,14 @@ const updateProductController = async (req, res) => {
   res.status(HTTPMap(status)).json(data);
 };
 
-const removeProduct = async (req, res) => {
-  const { id } = req.body;
+// const removeProduct = async (req, res) => {
+//   const { id } = req.body;
+//   await products.deleteProductById(Number(id));
+//   res.status(204).end();
+// };
+
+const productDelete = async (req, res) => {
+  const { id } = req.params;
   await products.deleteProductById(Number(id));
   res.status(204).end();
 };
@@ -35,6 +41,7 @@ module.exports = {
   getAllProducts,
   create,
   getProductsById,
-  removeProduct,
+  // removeProduct,
   updateProductController,
+  productDelete,
 };

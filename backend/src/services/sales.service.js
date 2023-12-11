@@ -24,8 +24,12 @@ const createAndInsertSales = async (sales) => ({
   data: await salesModel.createAndSaveNewSale(sales),
 });
 
+const deleteSaleById = async (id) => {
+  await salesModel.deleteSaleById(id);
+};
 module.exports = {
   getAllSalesService,
   getSaleByIdService,
   createAndInsertSales,
+  deleteSaleById,
 };

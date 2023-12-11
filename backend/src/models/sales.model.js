@@ -40,13 +40,13 @@ const createAndSaveNewSale = async (sales) => {
   const query = 'INSERT INTO sales (date) VALUES (?);';
   const [{ insertId }] = await connection.execute(query, [generateDate()]);
   await saveSalesProductsInDatabase(sales, insertId);
-  return { id: insertId, itemsSold: sales };
+  return insertId;
 };
 
-const deleteSaleById = (id) => {
+const deleteSaleById = async (id) => {
   const query = 'DELETE FROM sales WHERE id = ?';
   return connection.execute(query, [id]);
-};  
+};
 
 module.exports = {
   getAllSales,
