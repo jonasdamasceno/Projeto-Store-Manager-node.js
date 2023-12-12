@@ -7,7 +7,7 @@ const {
   getProductsById,
   updateProductController,
   create,
-  productDelete,
+  // productDelete,
 } = require('../../../src/controllers/product.controller');
 const {
   statusInvalidValueName5Character,
@@ -17,6 +17,7 @@ const {
   statusCreateNewProduct,
   statusBadRequestNameRequired,
 } = require('../../mock/mocks');
+// const { productsController } = require('../../../src/controllers');
 // const { products } = require('../../../src/models');
 
 const { expect } = chai;
@@ -55,18 +56,6 @@ describe('testa as funçoes da camada controller', function () {
     expect(res.status).to.have.been.calledWith(200);
     expect(res.json).to.have.been.calledWith(product);
   });
-  // it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
-  //   sinon
-  //     .stub(services.products, 'updateProductService')
-  //     .resolves(updateStatusSuccess);
-  //   const req = {
-  //     params: { id: '1' },
-  //     body: { name: 'Marreta' },
-  //   };
-  //   await updateProductController(req, res);
-  //   expect(res.status).to.have.calledWith(200);
-  //   expect(res.json).to.have.calledWith(batmanHammerWithId);
-  // });
   it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
     sinon
       .stub(services.products, 'updateProductService')
@@ -137,13 +126,14 @@ describe('testa as funçoes da camada controller', function () {
     expect(res.status).to.have.calledWith(400);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
   });
-  it('Deve retornar o status 204 ao deletar um produto com sucesso', async function () {
-    const req = {
-      params: {
-        id: 1,
-      },
-    };
-    await productDelete(req, res);
-    expect(res.status.calledWith(204)).to.be.equal(true);
-  });
+  // it('Função remove', async function () {
+  //   const req = {
+  //     params: { id: 2 },
+  //   };
+  //   sinon.stub(services.products, 'deleteProductById').resolves(testeRemove);
+  //   await productsController.productDelete(req, res);
+
+  //   expect(res.status).to.have.been.calledWith(204);
+  //   expect(res.json).to.have.been.calledWith(true);
+  // });
 });

@@ -99,5 +99,16 @@ describe('testa a camada controller do endpoint sales', function () {
     await salesController.handleSalesInsertion(req, res);
     expect(res.status).to.have.calledWith(201);
   });
+  // it('Deve retornar o status 204 ao deletar uma venda com sucesso', async function () {
+  //   const req = {
+  //     params: {
+  //       id: 1,
+  //     },
+  //   };
+  //   const res = { sendStatus: sinon.stub().returnsThis(), json: sinon.stub() };
+  //   await salesController.removesale(req, res);
+  //   expect(res.sendStatus.calledWith(204)).to.be.equal(true);
+  // });
+
   afterEach(sinon.restore);
 });

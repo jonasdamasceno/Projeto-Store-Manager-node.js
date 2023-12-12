@@ -47,6 +47,19 @@ const statusNotFound = {
   data: { message: 'Product not found' },
 };
 
+const idForDelete = [
+  [
+    {
+      id: 2,
+      name: 'Traje de encolhimento',
+    },
+  ],
+];
+const testeRemove = {
+  status: 204,
+  data: true,
+};
+
 module.exports = {
   allProducts,
   batmanHammer,
@@ -58,4 +71,6 @@ module.exports = {
   standardProduct,
   statusCreateNewProduct,
   productDBUpdate,
+  idForDelete,
+  testeRemove,
 };

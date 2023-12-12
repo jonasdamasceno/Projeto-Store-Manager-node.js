@@ -3,7 +3,11 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const connection = require('../../../src/connection/connection');
-const { allProducts, productDBUpdate } = require('../../mock/mocks');
+const {
+  allProducts,
+  productDBUpdate,
+  // idForDelete,
+} = require('../../mock/mocks');
 const {
   getAllProducts,
   getProductsById,
@@ -75,4 +79,15 @@ describe('testa as funçes da camada model', function () {
   beforeEach(function () {
     sinon.restore();
   });
+  // it('testa a função deleteProductById da camada model', async function () {
+  //   sinon
+  //     .stub(connection, 'execute')
+  //     .onFirstCall(2)
+  //     .resolves(idForDelete)
+  //     .onSecondCall()
+  //     .resolves();
+
+  //   const result = await products.deleteProductById(2);
+  //   expect(result).to.be.equal(true);
+  // });
 });

@@ -70,6 +70,15 @@ const insertSalesSucces = {
   status: 'CREATED',
   data: { id: insertIdModel, itemsSold: inputAddSales },
 };
+const idFromDB = [
+  [
+    {
+      date: '2023-11-22T19:31:53.000Z',
+      productId: 3,
+      quantity: 15,
+    },
+  ],
+];
 
 module.exports = {
   salesMock,
@@ -81,4 +90,5 @@ module.exports = {
   statusNotFoundSale,
   responseSalesData,
   insertSalesSucces,
+  idFromDB,
 };
