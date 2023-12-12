@@ -7,6 +7,7 @@ const {
   getProductsById,
   updateProductController,
   create,
+  productDelete,
 } = require('../../../src/controllers/product.controller');
 const {
   statusInvalidValueName5Character,
@@ -135,5 +136,14 @@ describe('testa as funçoes da camada controller', function () {
     await create(req, res);
     expect(res.status).to.have.calledWith(400);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
+  });
+  it('Deve retornar o status 204 ao deletar um produto com sucesso', async function () {
+    const req = {
+      params: {
+        id: 1,
+      },
+    };
+    await productDelete(req, res);
+    expect(res.status.calledWith(204)).to.be.equal(true);
   });
 });

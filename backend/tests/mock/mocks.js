@@ -27,6 +27,17 @@ const statusInvalidValueName5Character = {
   data: { message: '"name" length must be at least 5 characters long' },
 };
 
+const productDBUpdate = [
+  {
+    id: 1,
+    name: 'Lâminas do Caos',
+  },
+  {
+    id: 2,
+    name: 'Traje de encolhimento',
+  },
+];
+
 const statusBadRequestNameRequired = {
   status: 'BAD_REQUEST',
   data: { message: '"name" is required' },
@@ -46,4 +57,5 @@ module.exports = {
   statusNotFound,
   standardProduct,
   statusCreateNewProduct,
+  productDBUpdate,
 };
