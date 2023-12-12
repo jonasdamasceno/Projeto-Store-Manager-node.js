@@ -1,31 +1,30 @@
-const dataAtual = new Date();
-const dataAtualFormatada = dataAtual.toISOString();
+const data = '2023-11-21T19:11:33.000Z';
 const salesMock = [
   {
     saleId: 1,
     productId: 1,
     quantity: 5,
-    date: dataAtualFormatada,
+    date: data,
   },
   {
     saleId: 1,
     productId: 2,
     quantity: 10,
-    date: dataAtualFormatada,
+    date: data,
   },
   {
     saleId: 2,
     productId: 3,
     quantity: 15,
-    date: dataAtualFormatada,
+    date: data,
   },
 ];
 
-const expectedResultById = [
+const salesWithIdOne = [
   {
     saleId: 1,
     quantity: 5,
-    date: dataAtualFormatada,
+    date: data,
   },
   {
     saleId: 1,
@@ -34,14 +33,15 @@ const expectedResultById = [
   },
 ];
 
-const insertIdDB = { insertId: 1 };
-const insertIdModel = 1;
-const saleFromModelSucces = { status: 'SUCCESS', data: salesMock };
-const saleIdFromModelSucces = { status: 'SUCCESs', data: expectedResultById };
-const statusNotFoundSale = {
+const saleFromModelSucces = { status: 'SUCCES', data: salesMock };
+const saleIdFromModelSucces = { status: 'SUCCES', data: salesWithIdOne };
+const saleFromModelNotFound = {
   status: 'NOT_FOUND',
   data: { message: 'Sale not found' },
 };
+
+const insertIdDB = { insertId: 1 };
+const insertIdModel = 1;
 const inputAddSales = [
   {
     productId: 1,
@@ -70,30 +70,15 @@ const insertSalesSucces = {
   status: 'CREATED',
   data: { id: insertIdModel, itemsSold: inputAddSales },
 };
-const idFromDB = [
-  [
-    {
-      date: '2023-11-22T19:31:53.000Z',
-      productId: 3,
-      quantity: 15,
-    },
-  ],
-];
-
-const testReove = {
-  status: 204,
-  data: true,
-};
 module.exports = {
   salesMock,
-  expectedResultById,
-  insertIdDB,
-  insertIdModel,
+  salesWithIdOne,
   saleFromModelSucces,
   saleIdFromModelSucces,
-  statusNotFoundSale,
+  saleFromModelNotFound,
+  insertIdDB,
+  insertIdModel,
+  inputAddSales,
   responseSalesData,
   insertSalesSucces,
-  idFromDB,
-  testReove,
 };

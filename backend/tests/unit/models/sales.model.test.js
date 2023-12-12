@@ -1,30 +1,27 @@
-const { expect, use } = require('chai');
+const { expect } = require('chai');
 const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const connection = require('../../../src/connection/connection');
-const { salesModel } = require('../../../src/models');
-// const { getAllSales } = require('../../../src/models/sales.model');
+const connection = require('../../../src/models/connection');
 const {
   salesMock,
-  expectedResultById,
+  salesWithIdOne,
   insertIdDB,
   insertIdModel,
-  idFromDB,
 } = require('../../mock/sales.mocks');
+const { salesModel } = require('../../../src/models');
 
-use(sinonChai);
-
-describe('testa as funçoes sales da camada model', function () {
+describe('Realizando testes - SALES MODEL:', function () {
   it('Verifica se é retornado todas as vendas', async function () {
     sinon.stub(connection, 'execute').resolves([salesMock]);
 
-    const sales = await salesModel.getAllSales();
+    const sales = await salesModel.findAllSales();
     expect(sales).to.be.deep.equal(salesMock);
   });
-  it('verifica o retorno de uma venda atraves do id', async function () {
-    sinon.stub(connection, 'execute').resolves([expectedResultById]);
-    const resultModel = await salesModel.getSalesById(1);
-    expect(resultModel).to.be.deep.equal(expectedResultById);
+  it('Verifica se é possivel filtrar por somente uma venda', async function () {
+    sinon.stub(connection, 'execute').resolves([salesWithIdOne]);
+
+    const sales = await salesModel.findSalesById(1);
+
+    expect(sales).to.be.deep.equal(salesWithIdOne);
   });
   it('Verifica se é possivel cadastrar produtos', async function () {
     sinon
@@ -44,29 +41,11 @@ describe('testa as funçoes sales da camada model', function () {
         quantity: 5,
       },
     ];
-    const insertId = await salesModel.createAndSaveNewSale(inputData);
-    console.log(insertId);
-    expect(insertId.id).to.be.an('number');
-    expect(insertId.id).to.be.equal(insertIdModel);
+    const insertId = await salesModel.insertNewSales(inputData);
+    expect(insertId).to.be.an('number');
+    expect(insertId).to.be.equal(insertIdModel);
   });
-  it('testa a função deleteSaleById da camada model', async function () {
-    sinon
-      .stub(connection, 'execute')
-      .onFirstCall()
-      .resolves(idFromDB)
-      .onSecondCall()
-      .resolves()
-      .onThirdCall()
-      .resolves();
-
-    const result = await salesModel.deleteSaleById(2);
-    expect(result).to.be.equal(true);
+  afterEach(function () {
+    sinon.restore();
   });
-  it('testaa a função deleteSaleById se nao é encontrado o id', async function () {
-    sinon.stub(connection, 'execute').resolves([[]]);
-    const result = await salesModel.deleteSaleById(999);
-    expect(result).to.be.equal(null);
-  });
-
-  afterEach(sinon.restore);
 });

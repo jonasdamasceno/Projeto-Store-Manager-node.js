@@ -1,55 +1,41 @@
-const { products } = require('../services');
-const { updateProductService, searchProductsService } = require('../services/products.service');
 const HTTPMap = require('../utils/generetaHTTPStatus');
+const { productService } = require('../services');
 
-const getAllProducts = async (req, res) => {
-  const result = await products.getAllProducts();
-  res.status(200).json(result);
-};
-
-const getProductsById = async (req, res) => {
-  console.log('chegamos aqui');
+const findById = async (req, res) => {
   const { id } = req.params;
-  const { status, data } = await products.getProductsById(id);
-  res.status(HTTPMap(status)).json(data);
-};
-const create = async (req, res) => {
-  const name = req.body;
-  const { status, data } = await products.create(name);
+  const { status, data } = await productService.findById(id);
   res.status(HTTPMap(status)).json(data);
 };
 
-const updateProductController = async (req, res) => {
+const insertNewProduct = async (req, res) => {
+  const newProduct = req.body;
+  const { status, data } = await productService.createNewProduct(newProduct);
+  res.status(HTTPMap(status)).json(data);
+};
+
+const updateProductName = async (req, res) => {
   const update = req.body;
   const { id } = req.params;
-  const { status, data } = await updateProductService(update, Number(id));
+  const { status, data } = await productService.updateProduct(update, Number(id));
   res.status(HTTPMap(status)).json(data);
 };
-
-// const removeProduct = async (req, res) => {
-//   const { id } = req.body;
-//   await products.deleteProductById(Number(id));
-//   res.status(204).end();
-// };
 
 const productDelete = async (req, res) => {
   const { id } = req.params;
-  await products.deleteProductById(Number(id));
-  res.status(204).send();
+  await productService.deleteProductById(Number(id));
+  res.status(204).end();
 };
 
-const searchProductsController = async (req, res) => {
+const filterProducts = async (req, res) => {
   const { q } = req.query;
-  const serviceResponse = await searchProductsService(q);
+  const serviceResponse = await productService.filterProducts(q);
   res.status(200).json(serviceResponse);
 };
 
 module.exports = {
-  getAllProducts,
-  create,
-  getProductsById,
-  // removeProduct,
-  updateProductController,
+  findById,
+  insertNewProduct,
+  updateProductName,
   productDelete,
-  searchProductsController,
+  filterProducts,
 };

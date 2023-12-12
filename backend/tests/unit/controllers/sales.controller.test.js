@@ -1,73 +1,57 @@
-const { expect, use } = require('chai');
+const { expect } = require('chai');
+const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { salesService } = require('../../../src/services');
 const { salesController } = require('../../../src/controllers');
 const {
-  salesMock,
   saleFromModelSucces,
-  expectedResultById,
+  salesMock,
   saleIdFromModelSucces,
-  statusNotFoundSale,
+  salesWithIdOne,
+  saleFromModelNotFound,
   insertSalesSucces,
-  testReove,
 } = require('../../mock/sales.mocks');
-// const { getAllSalesService } = require('../../../src/services/sales.service');
 
-use(sinonChai);
+chai.use(sinonChai);
 
-describe('testa a camada controller do endpoint sales', function () {
-  // let res;
-  // beforeEach(function () {
-  //   res = {
-  //     status: sinon.stub().returnsThis(),
-  //     json: sinon.stub(),
-  //   };
-  // });
-
-  it('testa o returno da função getAllSales camada controller', async function () {
-    sinon
-      .stub(salesService, 'getAllSalesService')
-      .resolves(saleFromModelSucces);
+describe('Realizando testes - SALES CONTROLLER:', function () {
+  it('Verifica AllSales retorna corretamente', async function () {
+    sinon.stub(salesService, 'findAllSales').resolves(saleFromModelSucces);
     const req = {
       body: {},
       params: {},
     };
-
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
     };
-
     await salesController.getAllSales(req, res);
+
     expect(res.status).to.have.calledWith(200);
     expect(res.json).to.have.calledWith(salesMock);
   });
-  it('testa o funcionamento da função getById da camada controller', async function () {
-    sinon
-      .stub(salesService, 'getSaleByIdService')
-      .resolves(saleIdFromModelSucces);
+  it('Verifica SUCCES salesById', async function () {
+    sinon.stub(salesService, 'findSalesById').resolves(saleIdFromModelSucces);
     const req = {
       body: {},
       params: { id: 1 },
     };
-
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
     };
-
     await salesController.getSaleById(req, res);
-    expect(res.status).to.have.calledWith();
-    expect(res.json).to.have.calledWith(expectedResultById);
+
+    expect(res.status).to.have.calledWith(200);
+    expect(res.json).to.have.calledWith(salesWithIdOne);
   });
-  it('testa o funcionamento da função getById da erro com um id inexistente', async function () {
-    sinon.stub(salesService, 'getSaleByIdService').resolves(statusNotFoundSale);
+  it('Verifica se for solicitado um Id de venda não existente', async function () {
+    sinon.stub(salesService, 'findSalesById').resolves(saleFromModelNotFound);
     const req = {
       body: {},
-      params: { id: 999 },
+      params: { id: 99999 },
     };
-
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
@@ -78,9 +62,7 @@ describe('testa a camada controller do endpoint sales', function () {
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
   });
   it('Verifica se é possivel criar novas vendas', async function () {
-    sinon
-      .stub(salesService, 'createAndInsertSales')
-      .resolves(insertSalesSucces);
+    sinon.stub(salesService, 'insertSales').resolves(insertSalesSucces);
 
     const req = {
       body: [
@@ -99,24 +81,11 @@ describe('testa a camada controller do endpoint sales', function () {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
     };
-    await salesController.handleSalesInsertion(req, res);
+    await salesController.insertNewSales(req, res);
     expect(res.status).to.have.calledWith(201);
   });
-  it('testa a função de deletar uma venda', async function () {
-    const req = {
-      params: {
-        id: 1,
-      },
-    };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      end: sinon.stub(),
-    };
-    sinon.stub(salesService, 'deleteSaleById').resolves(testReove);
-    await salesController.removesale(req, res);
-    expect(res.status).to.have.been.calledWith(204);
-    expect(res.end).to.have.been.calledWith();
-  });
 
-  afterEach(sinon.restore);
+  afterEach(function () {
+    sinon.restore();
+  });
 });

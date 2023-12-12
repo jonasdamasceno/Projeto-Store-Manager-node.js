@@ -1,108 +1,114 @@
+const { expect } = require('chai');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const services = require('../../../src/services');
+const { productService } = require('../../../src/services');
+const { productController } = require('../../../src/controllers');
 const {
-  getAllProducts,
-  getProductsById,
-  updateProductController,
-  create,
-  // productDelete,
-} = require('../../../src/controllers/product.controller');
-const {
-  statusInvalidValueName5Character,
-  // statusBadRequestNameRequired,
-  // statusNotFound,
-  standardProduct,
-  statusCreateNewProduct,
-  statusBadRequestNameRequired,
-} = require('../../mock/mocks');
-const { products } = require('../../../src/models');
-// const { productsController } = require('../../../src/controllers');
-// const { products } = require('../../../src/models');
+  productFromModelSucces,
+  product,
+  inserProductModelSucces,
+  insertProduct,
+  inserProductModelNoName,
+  updateProductServiceSucces,
+  updatedProductService,
+  updateProductServiceNameFiveCharacter,
+  updateProductServiceSuccesWithoutName,
+  updateProductServiceInvalidId,
+} = require('../../mock/products.mock');
 
-const { expect } = chai;
 chai.use(sinonChai);
 
-describe('testa as funçoes da camada controller', function () {
-  afterEach(function () {
-    sinon.restore();
-  });
-
-  it('testa o retorno da função getAllProducts na camada controller', async function () {
-    const expectedResult = [
-      { id: 1, name: 'Product 1' },
-      { id: 2, name: 'Product 2' },
-    ];
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
+describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
+  it('Testando findById retornado com SUCESS', async function () {
+    sinon.stub(productService, 'findById').resolves(productFromModelSucces);
+    const req = {
+      params: { id: 1 },
+      body: {},
     };
-
-    sinon.stub(services.products, 'getAllProducts').resolves(expectedResult);
-    await getAllProducts(undefined, res);
-
-    expect(res.status).to.have.been.calledOnceWith(200);
-    expect(res.json).to.have.been.calledOnceWith(expectedResult);
-  });
-  it('testa o retorno da função getProductsById na camada controller', async function () {
-    const product = { id: 1, name: 'Martelo de Thor' };
-    sinon
-      .stub(services.products, 'getProductsById')
-      .resolves({ status: 'SUCCESS', data: product });
 
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
     };
-
-    const req = { params: { id: 1 }, body: {} };
-    await getProductsById(req, res);
+    await productController.findById(req, res);
     expect(res.status).to.have.been.calledWith(200);
     expect(res.json).to.have.been.calledWith(product);
   });
-  it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
+  it('Testando para inserir um novo produto com sucesso', async function () {
     sinon
-      .stub(services.products, 'updateProductService')
-      .resolves(statusInvalidValueName5Character);
+      .stub(productService, 'createNewProduct')
+      .resolves(inserProductModelSucces);
     const req = {
-      params: { id: '1' },
-      body: { name: 'teia' },
+      params: {},
+      body: { name: 'Marreta' },
     };
 
     const res = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
     };
+    await productController.insertNewProduct(req, res);
+    expect(res.status).to.have.calledWith(201);
+    expect(res.json).to.have.calledWith(insertProduct);
+  });
+  it('Testando para inserir um novo produto com Fracasso', async function () {
+    sinon
+      .stub(productService, 'createNewProduct')
+      .resolves(inserProductModelNoName);
+    const req = {
+      params: {},
+      body: { namee: 'Marreta' },
+    };
 
-    await updateProductController(req, res);
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    await productController.insertNewProduct(req, res);
+    expect(res.status).to.have.calledWith(400);
+    expect(res.json).to.have.calledWith(sinon.match.has('message'));
+  });
+  it('Testando para atualizar um produto com sucesso', async function () {
+    sinon
+      .stub(productService, 'createNewProduct')
+      .resolves(updateProductServiceSucces);
+    const req = {
+      params: { id: '1' },
+      body: { name: 'Marreta' },
+    };
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    await productController.insertNewProduct(req, res);
+    expect(res.status).to.have.calledWith(200);
+    expect(res.json).to.have.calledWith(updatedProductService);
+  });
+  it('Testando para atualizar um com nome menor que 5 caracteres', async function () {
+    sinon
+      .stub(productService, 'createNewProduct')
+      .resolves(updateProductServiceNameFiveCharacter);
+    const req = {
+      params: { id: '1' },
+      body: { name: 'Jet' },
+    };
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    await productController.insertNewProduct(req, res);
     expect(res.status).to.have.calledWith(422);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
   });
-  // it('Testando para atualizar um sem a chave name', async function () {
-  //   sinon
-  //     .stub(services.products, 'create')
-  //     .resolves(statusBadRequestNameRequired);
-  //   const req = {
-  //     params: { id: '1' },
-  //     body: { name: 'Marreta' },
-  //   };
-
-  //   const res = {
-  //     status: sinon.stub().returnsThis(),
-  //     json: sinon.stub(),
-  //   };
-
-  //   await productsController.updateProductController(req, res);
-  //   expect(res.status).to.have.calledWith(400);
-  //   expect(res.json).to.have.calledWith(sinon.match.has('message'));
-  // });
-  it('testa se é possivel atualizar um produto com id invalida', async function () {
+  it('Testando para atualizar um sem a chave name', async function () {
     sinon
-      .stub(products, 'getAllProducts')
-      .resolves([]);
+      .stub(productService, 'createNewProduct')
+      .resolves(updateProductServiceSuccesWithoutName);
     const req = {
-      params: { id: '999' },
+      params: { id: '1' },
       body: { name: 'Marreta' },
     };
 
@@ -110,71 +116,29 @@ describe('testa as funçoes da camada controller', function () {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
     };
+    await productController.insertNewProduct(req, res);
+    expect(res.status).to.have.calledWith(400);
+    expect(res.json).to.have.calledWith(sinon.match.has('message'));
+  });
+  it('Testando para atualizar um produto com id Invalido', async function () {
+    sinon
+      .stub(productService, 'createNewProduct')
+      .resolves(updateProductServiceInvalidId);
+    const req = {
+      params: { id: '10' },
+      body: { name: 'Marreta' },
+    };
 
-    await updateProductController(req, res);
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    await productController.insertNewProduct(req, res);
     expect(res.status).to.have.calledWith(404);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
   });
-  it('testa o endpoint de cadastrar um novo produto', async function () {
-    sinon.stub(services.products, 'create').resolves(statusCreateNewProduct);
-    const req = {
-      params: {},
-      body: { name: 'Marreta' },
-    };
 
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
-
-    await create(req, res);
-    expect(res.status).to.have.calledWith(201);
-    expect(res.json).to.have.calledWith(standardProduct);
+  afterEach(function () {
+    sinon.restore();
   });
-  it('testa a falha ao tentar criar um novo produto', async function () {
-    sinon
-      .stub(services.products, 'create')
-      .resolves(statusBadRequestNameRequired);
-    const req = {
-      params: {},
-      body: { name: 'Marreta' },
-    };
-
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
-
-    await create(req, res);
-    expect(res.status).to.have.calledWith(400);
-    expect(res.json).to.have.calledWith(sinon.match.has('message'));
-  });
-  it('testa a atualização de um produto', async function () {
-    sinon
-      .stub(services.products, 'create')
-      .resolves(statusBadRequestNameRequired);
-    const req = {
-      params: {},
-      body: { name: 'Marreta' },
-    };
-
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
-
-    await create(req, res);
-    expect(res.status).to.have.calledWith(400);
-    expect(res.json).to.have.calledWith(sinon.match.has('message'));
-  });
-  // it('Função remove', async function () {
-  //   const req = {
-  //     params: { id: 2 },
-  //   };
-  //   sinon.stub(services.products, 'deleteProductById').resolves(testeRemove);
-  //   await productsController.productDelete(req, res);
-
-  //   expect(res.status).to.have.been.calledWith(204);
-  //   expect(res.json).to.have.been.calledWith(true);
-  // });
 });

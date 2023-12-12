@@ -1,5 +1,5 @@
 const httpErrorMap = {
-  SUCCESS: 200,
+  SUCCES: 200,
   BAD_REQUEST: 400,
   CREATED: 201,
   NOT_FOUND: 404,

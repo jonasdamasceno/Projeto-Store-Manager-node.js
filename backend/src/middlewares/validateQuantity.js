@@ -12,11 +12,12 @@ const validateQuantity = (req, res, next) => {
 
 const validateSale = async (req, res, next) => {
   const { saleId, productId } = req.params;
-  const allSales = await salesModel.getAllSales();
-  const isSaleFound = allSales.some((sale) => Number(saleId) === sale.saleId);
-  const isProductInSale = allSales.some((sale) => Number(productId) === sale.productId);
-  if (!isSaleFound) return res.status(404).json({ message: 'Sale not found' });
-  if (!isProductInSale) return res.status(404).json({ message: 'Product not found in sale' });
+  const allSales = await salesModel.findAllSales();
+  console.log(allSales);
+  const existSale = allSales.some((sale) => Number(saleId) === sale.saleId);
+  const existProduct = allSales.some((sale) => Number(productId) === sale.productId);
+  if (!existSale) return res.status(404).json({ message: 'Sale not found' });
+  if (!existProduct) return res.status(404).json({ message: 'Product not found in sale' });
   next();
 };
 
