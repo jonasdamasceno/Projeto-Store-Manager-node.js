@@ -2,9 +2,9 @@ const { expect } = require('chai');
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { salesModel } = require('../../../src/models');
-const { salesMock } = require('../../mock/sales.mocks');
-const { verifySaleExists } = require('../../../src/middlewares/verificySaleById');
+const { verifyIdExist } = require('../../../src/middlewares/verificyId');
+const { allProducts } = require('../../mock/mocks');
+const { products } = require('../../../src/models');
 
 chai.use(sinonChai);
 
@@ -20,27 +20,27 @@ describe('testa a validação de vendas', function () {
     sinon.restore();
   });
   it('testa se a validação de quantidade', async function () {
-    sinon.stub(salesModel, 'getAllSales').resolves(salesMock);
+    sinon.stub(products, 'getAllProducts').resolves(allProducts);
     const req = {
       body: {},
       params: { id: 1 },
     };
     // const messageQuantityIsRequired = { message: '"quantity" is required' };
     const next = sinon.stub().returns();
-    await verifySaleExists(req, res, next);
+    await verifyIdExist(req, res, next);
     expect(next).to.have.calledWith();
   });
   it('testa a validação quando é passado um id falso', async function () {
-    sinon.stub(salesModel, 'getAllSales').resolves(salesMock);
+    sinon.stub(products, 'getAllProducts').resolves(allProducts);
     const req = {
       body: {},
       params: { id: 999 },
     };
     const messageProductNotFound = {
-      message: 'Sale not found',
+      message: 'Product not found',
     };
     const next = sinon.stub().returns();
-    await verifySaleExists(req, res, next);
+    await verifyIdExist(req, res, next);
     expect(res.json).to.have.calledWith(messageProductNotFound);
   });
 });
