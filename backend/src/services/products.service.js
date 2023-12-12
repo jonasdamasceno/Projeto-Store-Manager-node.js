@@ -49,6 +49,7 @@ const create = async (newName) => {
 
 const updateProductService = async (update, id) => {
   const error = await validateUpdateProduct(update, id);
+  console.log(error, 'aaa');
   if (error) return error;
   const { name } = update;
   await products.updateProduct(update, id);

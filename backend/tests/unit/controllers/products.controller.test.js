@@ -12,11 +12,12 @@ const {
 const {
   statusInvalidValueName5Character,
   // statusBadRequestNameRequired,
-  statusNotFound,
+  // statusNotFound,
   standardProduct,
   statusCreateNewProduct,
   statusBadRequestNameRequired,
 } = require('../../mock/mocks');
+const { products } = require('../../../src/models');
 // const { productsController } = require('../../../src/controllers');
 // const { products } = require('../../../src/models');
 
@@ -98,8 +99,8 @@ describe('testa as funçoes da camada controller', function () {
   // });
   it('testa se é possivel atualizar um produto com id invalida', async function () {
     sinon
-      .stub(services.products, 'updateProductService')
-      .resolves(statusNotFound);
+      .stub(products, 'getAllProducts')
+      .resolves([]);
     const req = {
       params: { id: '999' },
       body: { name: 'Marreta' },
