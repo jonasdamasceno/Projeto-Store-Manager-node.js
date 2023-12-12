@@ -9,6 +9,16 @@ const {
   getProductsById,
   create,
 } = require('../../../src/models/products.model');
+// const { products } = require('../../../src/models');
+
+// const getByIdremove = [
+//   [
+//     {
+//       id: 2,
+//       name: 'Traje de encolhimento',
+//     },
+//   ],
+// ];
 
 chai.use(sinonChai);
 
@@ -31,4 +41,15 @@ describe('testa as funçes da camada model', function () {
     const result = await create('Product 1');
     expect(result).to.equal(1);
   });
+  // it('função delete', async function () {
+  //   sinon
+  //     .stub(connection, 'execute')
+  //     .onFirstCall(2)
+  //     .resolves(getByIdremove)
+  //     .onSecondCall()
+  //     .resolves();
+
+  //   const result = await products.deleteProductById(2);
+  //   expect(result).to.be.equal(true);
+  // });
 });

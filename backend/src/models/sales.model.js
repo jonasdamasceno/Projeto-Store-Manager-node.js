@@ -23,11 +23,6 @@ const getSalesById = async (id) => {
 };
 
 const saveSalesProductsInDatabase = async (sales, insertId) => {
-  if (insertId === undefined) {
-    console.error('O parâmetro "insertId" está indefinido.');
-    return;
-  }
-
   let salesProductsQueries = [];
   const query = `INSERT INTO sales_products (sale_id, product_id, quantity) 
         VALUES (?, ?, ?);`;
@@ -44,8 +39,13 @@ const createAndSaveNewSale = async (sales) => {
 };
 
 const deleteSaleById = async (id) => {
+  const exist = await getSalesById(id);
+  if (!exist.length) return null; 
   const query = 'DELETE FROM sales WHERE id = ?';
-  return connection.execute(query, [id]);
+  await connection.execute(query, [id]);
+  const queryprod = 'DELETE FROM sales_products WHERE sale_id = (?)';
+  await connection.execute(queryprod, [id]);
+  return true;
 };
 
 const updateSalesProductQuantity = async (saleId, productId, quantity) => {

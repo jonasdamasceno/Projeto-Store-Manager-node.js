@@ -35,7 +35,13 @@ const expectedResultById = [
     date: '2023-11-21T19:11:33.000Z',
   },
 ];
+
+const insertIdDB = { insertId: 1 };
+const insertIdModel = 1;
+
 module.exports = {
   salesMock,
   expectedResultById,
+  insertIdDB,
+  insertIdModel,
 };
