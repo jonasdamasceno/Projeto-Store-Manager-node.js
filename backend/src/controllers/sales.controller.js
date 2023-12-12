@@ -30,9 +30,17 @@ const removesale = async (req, res) => {
   await salesService.deleteSaleById(id);
   res.status(204).end();
 };
+
+const updateSalesProductQuantityHandler = async (req, res) => {
+  const { saleId, productId } = req.params;
+  const { quantity } = req.body;
+  const { status, data } = await salesService.updateProductSales({ saleId, productId, quantity });
+  res.status(HTTPMap(status)).json(data);
+};
 module.exports = {
   getAllSales,
   getSaleById,
   handleSalesInsertion,
   removesale,
+  updateSalesProductQuantityHandler,
 };

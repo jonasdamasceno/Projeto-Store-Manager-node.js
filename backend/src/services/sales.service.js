@@ -27,9 +27,23 @@ const createAndInsertSales = async (sales) => ({
 const deleteSaleById = async (id) => {
   await salesModel.deleteSaleById(id);
 };
+
+const updateProductSales = async (updateInfos) => {
+  const { saleId, productId, quantity } = updateInfos;
+  const findBySaleId = await salesModel.getSalesById(saleId);
+  const filtredByProductId = (findBySaleId
+    .filter((sale) => sale.productId === Number(productId)))[0];
+  await salesModel.updateSalesProductQuantity(saleId, productId, quantity);
+  const data = { saleId: Number(saleId),
+    productId: Number(productId),
+    quantity,
+    date: filtredByProductId.date };
+  return { status: 'SUCCESS', data };
+}; 
 module.exports = {
   getAllSalesService,
   getSaleByIdService,
   createAndInsertSales,
   deleteSaleById,
+  updateProductSales,
 };

@@ -1,5 +1,5 @@
 const { products } = require('../services');
-const { updateProductService } = require('../services/products.service');
+const { updateProductService, searchProductsService } = require('../services/products.service');
 const HTTPMap = require('../utils/generetaHTTPStatus');
 
 const getAllProducts = async (req, res) => {
@@ -8,6 +8,7 @@ const getAllProducts = async (req, res) => {
 };
 
 const getProductsById = async (req, res) => {
+  console.log('chegamos aqui');
   const { id } = req.params;
   const { status, data } = await products.getProductsById(id);
   res.status(HTTPMap(status)).json(data);
@@ -37,6 +38,12 @@ const productDelete = async (req, res) => {
   res.status(204).end();
 };
 
+const searchProductsController = async (req, res) => {
+  const { q } = req.query;
+  const serviceResponse = await searchProductsService(q);
+  res.status(200).json(serviceResponse);
+};
+
 module.exports = {
   getAllProducts,
   create,
@@ -44,4 +51,5 @@ module.exports = {
   // removeProduct,
   updateProductController,
   productDelete,
+  searchProductsController,
 };
