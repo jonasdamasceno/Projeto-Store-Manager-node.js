@@ -88,7 +88,7 @@ describe('testa as funçoes da camada controller', function () {
   //   };
   //   await updateProductController(req, res);
   //   expect(res.status).to.have.calledWith(400);
-  //   expect(res.j son).to.have.calledWith(sinon.match.has('message'));
+  //   expect(res.json).to.have.calledWith(sinon.match.has('message'));
   // });
 
   it('testa se é possivel atualizar um produto com id invalida', async function () {
