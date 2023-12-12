@@ -1,99 +1,82 @@
-const { expect } = require('chai');
+const { expect, use } = require('chai');
 const sinon = require('sinon');
-const { productsModel } = require('../../../src/models');
-const { productService } = require('../../../src/services');
+const sinonChai = require('sinon-chai');
+const models = require('../../../src/models');
 const {
-  product,
-  productIdFromModel,
-  mockProducts,
-  updateProduct,
-  updatedProductService,
+  allProducts,
+  batmanHammer,
+  batmanHammerWithId,
 } = require('../../mock/products.mock');
+// const { responseService } = require('../../../src/services');
+const {
+  getAllProducts,
+  getProductsById,
+} = require('../../../src/services/products.service');
+const { products } = require('../../../src/services');
 
-describe('Realizando testes - PRODUCTS SERVICES:', function () {
-  it('Verifica findById com sucesso', async function () {
-    sinon.stub(productsModel, 'findById').resolves(product);
+use(sinonChai);
 
-    const serviceResponse = await productService.findById(1);
-
-    expect(serviceResponse.status).to.equal('SUCCES');
-    expect(serviceResponse.data).to.be.deep.equal(product);
+describe('testa as funçoes da camada service', function () {
+  it('testa a função getAllProducts da camada service', async function () {
+    sinon.stub(models.products, 'getAllProducts').resolves(allProducts);
+    const result = await getAllProducts();
+    expect(result).to.be.deep.equal(allProducts);
   });
-  it('Verifica findById com falha', async function () {
-    sinon.stub(productsModel, 'findById').resolves();
-
-    const serviceResponse = await productService.findById(1);
-
-    expect(serviceResponse.status).to.equal('NOT_FOUND');
-    expect(serviceResponse.data.message).to.be.deep.equal('Product not found');
+  it('testa a função getProductsById com o status de SUCCESS', async function () {
+    sinon.stub(models.products, 'getProductsById').resolves(allProducts);
+    const result = await getProductsById(1);
+    expect(result.status).to.equal('SUCCESS');
+    expect(result.data).to.be.deep.equal(allProducts);
   });
-  it('Verifica se é possivel inserir um produto corretamente', async function () {
-    sinon.stub(productsModel, 'insertNewProduct').resolves(productIdFromModel);
-    const inputData = { name: 'Marreta 25kg' };
-
-    const serviceResponse = await productService.createNewProduct(inputData);
-    expect(serviceResponse.status).to.be.equal('CREATED');
-    expect(serviceResponse.data).to.be.deep.equal({
-      id: 5,
-      name: 'Marreta 25kg',
-    });
+  it('testa a função getProductsById quando o id nao é encontrado', async function () {
+    sinon.stub(models.products, 'getProductsById').resolves();
+    const result = await getProductsById(999);
+    expect(result.status).to.equal('NOT_FOUND');
+    expect(result.data.message).to.be.deep.equal('Product not found');
   });
-  it('Verifica se o nome não existir', async function () {
-    sinon.stub(productsModel, 'insertNewProduct').resolves(productIdFromModel);
-    // const inputData = { namee: 'Marreta 25kg' };
-    const serviceResponse = await productService.createNewProduct({});
-    expect(serviceResponse.status).to.be.equal('BAD_REQUEST');
-    expect(serviceResponse.data.message).to.be.deep.equal('"name" is required');
-  });
-  it('Verifica se o nome for menor que 5 letras', async function () {
-    sinon.stub(productsModel, 'insertNewProduct').resolves(productIdFromModel);
-    const inputData = { name: 'abc' };
-    const serviceResponse = await productService.createNewProduct(inputData);
-    expect(serviceResponse.status).to.be.equal('INVALID_VALUE');
-    expect(serviceResponse.data.message).to.be.deep.equal(
-      '"name" length must be at least 5 characters long',
+  it('testa o funcionamento da atulização da tabela products', async function () {
+    sinon.stub(models.products, 'getAllProducts').resolves(allProducts);
+    sinon.stub(models.products, 'updateProduct').resolves();
+    const productIdToUpdate = 1;
+    const serviceLayerResponse = await products.updateProductService(
+      batmanHammer,
+      productIdToUpdate,
     );
+    expect(serviceLayerResponse.status).to.equal('SUCCESS');
+    expect(serviceLayerResponse.data).to.deep.equal(batmanHammerWithId);
   });
-  it('Verfica se é possivel atualizar um produto com sucesso', async function () {
-    sinon.stub(productsModel, 'findAll').resolves(mockProducts);
-    sinon.stub(productsModel, 'updateNewProduct').resolves();
-
-    const serviceResponse = await productService.updateProduct(
-      updateProduct,
-      1,
+  it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
+    sinon.stub(models.products, 'getAllProducts').resolves(allProducts);
+    sinon.stub(models.products, 'updateProduct').resolves();
+    const newProduct = { name: 'teia' };
+    const productIdToUpdate = 1;
+    const serviceLayerResponse = await products.updateProductService(
+      newProduct,
+      productIdToUpdate,
     );
-    expect(serviceResponse.status).to.equal('SUCCES');
-    expect(serviceResponse.data).to.deep.equal(updatedProductService);
+    const message = '"name" length must be at least 5 characters long';
+    expect(serviceLayerResponse.status).to.equal('INVALID_VALUE');
+    expect(serviceLayerResponse.data.message).to.equal(message);
   });
-  it('Verfica se é não possivel atualizar sem a chave name', async function () {
-    sinon.stub(productsModel, 'findAll').resolves(mockProducts);
-    sinon.stub(productsModel, 'updateNewProduct').resolves();
+  it('testa a atualização do produto sem a chave name', async function () {
+    sinon.stub(models.products, 'getAllProducts').resolves(allProducts);
+    sinon.stub(models.products, 'updateProduct').resolves();
+    const productIdToUpdate = 1;
+    const message = '"name" is required';
 
-    const serviceResponse = await productService.updateProduct({}, 1);
-    expect(serviceResponse.status).to.equal('BAD_REQUEST');
-    expect(serviceResponse.data.message).to.equal('"name" is required');
+    const serviceLayerResponse = await products.updateProductService({}, productIdToUpdate);
+    expect(serviceLayerResponse.status).to.equal('BAD_REQUEST');
+    expect(serviceLayerResponse.data.message).to.equal(message);
   });
-  it('Verfica se é não possivel atualizar nome menor que 5 letras', async function () {
-    sinon.stub(productsModel, 'findAll').resolves(mockProducts);
-    sinon.stub(productsModel, 'updateNewProduct').resolves();
-    const inputProduct = { name: 'Jet' };
-    const serviceResponse = await productService.updateProduct(inputProduct, 1);
-    expect(serviceResponse.status).to.equal('INVALID_VALUE');
-    expect(serviceResponse.data.message).to.equal(
-      '"name" length must be at least 5 characters long',
-    );
+  it('testa se nao é possivel atualizar um produto sem id no BD', async function () {
+    sinon.stub(models.products, 'getAllProducts').resolves(allProducts);
+    sinon.stub(models.products, 'updateProduct').resolves();
+    const message = 'Product not found';
+    
+    const serviceLayerResponse = await products.updateProductService(batmanHammer, 999);
+    expect(serviceLayerResponse.status).to.equal('NOT_FOUND');
+    expect(serviceLayerResponse.data.message).to.equal(message);
   });
-  it('Verfica se é não possivel atualizar nome com id Inexistente', async function () {
-    sinon.stub(productsModel, 'findAll').resolves(mockProducts);
-    sinon.stub(productsModel, 'updateNewProduct').resolves();
-    const serviceResponse = await productService.updateProduct(
-      updateProduct,
-      10,
-    );
-    expect(serviceResponse.status).to.equal('NOT_FOUND');
-    expect(serviceResponse.data.message).to.equal('Product not found');
-  });
-
   afterEach(function () {
     sinon.restore();
   });

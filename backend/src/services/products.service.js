@@ -1,60 +1,79 @@
-const { productsModel } = require('../models');
+const { products } = require('../models');
 
-const verifyNameAndIdProduct = async (update, id) => {
+const validateUpdateProduct = async (update, id) => {
+  const BAD_REQUEST_NAME_REQUIRED = {
+    status: 'BAD_REQUEST',
+    data: { message: '"name" is required' },
+  };
+  const INVALID_VALUE_NAME_LENGTH = {
+    status: 'INVALID_VALUE',
+    data: { message: '"name" length must be at least 5 characters long' },
+  };
+  const NOT_FOUND = {
+    status: 'NOT_FOUND', data: { message: 'Product not found' },
+  };
   const { name } = update;
-  if (!name) return { status: 'BAD_REQUEST', data: { message: '"name" is required' } };
-  if (name.length < 5) {
-    return { status: 'INVALID_VALUE',
-      data:
-   { message: '"name" length must be at least 5 characters long' } }; 
-  }
-  const allProducts = await productsModel.findAll();
-  const exist = allProducts.some((product) => Number(id) === product.id);
-  if (!exist) {
-    return { status: 'NOT_FOUND',
-      data: { message: 'Product not found' } }; 
-  }
+  if (!name) return BAD_REQUEST_NAME_REQUIRED;
+  if (name.length < 5) return INVALID_VALUE_NAME_LENGTH;
+  const allProducts = await products.getAllProducts();
+  const confirmationProductExists = allProducts.some((product) => Number(id) === product.id);
+  if (!confirmationProductExists) return NOT_FOUND;
 };
 
-const findById = async (id) => {
-  const product = await productsModel.findById(id);
+const getAllProducts = async () => products.getAllProducts();
+// const getProductsById = async (productId) => products.getProductsById(productId);
+const getProductsById = async (id) => {
+  const product = await products.getProductsById(id);
   if (!product) return { status: 'NOT_FOUND', data: { message: 'Product not found' } };
-  return { status: 'SUCCES', data: product };
+  return { status: 'SUCCESS', data: product };
 };
-
-const createNewProduct = async (newProduct) => {
-  const { name } = newProduct;
-  if (!name) return { status: 'BAD_REQUEST', data: { message: '"name" is required' } };
-  if (name.length < 5) { 
-    return { status: 'INVALID_VALUE', 
-      data: { message: '"name" length must be at least 5 characters long' },
-    }; 
+const create = async (newName) => {
+  const { name } = newName;
+  const BAD_REQUEST_NAME_REQUIRED = {
+    status: 'BAD_REQUEST',
+    data: { message: '"name" is required' },
+  };
+  const INVALID_VALUE_NAME_LENGTH = {
+    status: 'INVALID_VALUE',
+    data: { message: '"name" length must be at least 5 characters long' },
+  };
+  if (!name) {
+    return BAD_REQUEST_NAME_REQUIRED;
   }
-  const id = await productsModel.insertNewProduct(newProduct);
+  if (name.length < 5) {
+    return INVALID_VALUE_NAME_LENGTH;
+  }
+  const id = await products.create(name);
   return { status: 'CREATED', data: { id, name } };
 };
 
-const updateProduct = async (update, id) => {
-  const error = await verifyNameAndIdProduct(update, id);
+const updateProductService = async (update, id) => {
+  const error = await validateUpdateProduct(update, id);
+  console.log(error, 'aaa');
   if (error) return error;
   const { name } = update;
-  await productsModel.updateNewProduct(update, id);
-  return { status: 'SUCCES', data: { id, name } };
+  await products.updateProduct(update, id);
+  return { status: 'SUCCESS', data: { id, name } };
 };
 
+// const deleteProductById = async (id) => {
+//   await products.deleteProductById(id);
+// };
 const deleteProductById = async (id) => {
-  await productsModel.deleteProduct(id);
+  await products.deleteProductById(id);
 };
 
-const filterProducts = async (q) => {
-  const product = await productsModel.filterProduct(q);
-  return product;
+const searchProductsService = async (q) => {
+  const filteredProducts = await products.searchProducts(q);
+  return filteredProducts;
 };
 
 module.exports = {
-  findById,
-  createNewProduct,
-  updateProduct,
+  getAllProducts,
+  create,
+  // createNewProduct,
+  getProductsById,
   deleteProductById,
-  filterProducts,
+  updateProductService,
+  searchProductsService,
 };
