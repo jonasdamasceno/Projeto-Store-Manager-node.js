@@ -54,7 +54,18 @@ describe('testa as funçoes da camada controller', function () {
     expect(res.status).to.have.been.calledWith(200);
     expect(res.json).to.have.been.calledWith(product);
   });
-
+  // it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
+  //   sinon
+  //     .stub(services.products, 'updateProductService')
+  //     .resolves(updateStatusSuccess);
+  //   const req = {
+  //     params: { id: '1' },
+  //     body: { name: 'Marreta' },
+  //   };
+  //   await updateProductController(req, res);
+  //   expect(res.status).to.have.calledWith(200);
+  //   expect(res.json).to.have.calledWith(batmanHammerWithId);
+  // });
   it('testa a condição de que o nome tem que ter mais de 5 letras', async function () {
     sinon
       .stub(services.products, 'updateProductService')

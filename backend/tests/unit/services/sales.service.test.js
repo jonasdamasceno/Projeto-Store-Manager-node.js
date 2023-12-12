@@ -5,7 +5,6 @@ const { salesService } = require('../../../src/services');
 const { salesMock, expectedResultById } = require('../../mock/sales.mocks');
 
 describe('testa o endpoint de vendas na camada service', function () {
-  afterEach(sinon.restore);
   it('testa a função getAllSalesService', async function () {
     sinon.stub(salesModel, 'getAllSales').resolves(salesMock);
     const responseService = await salesService.getAllSalesService();
@@ -28,4 +27,5 @@ describe('testa o endpoint de vendas na camada service', function () {
   //   expect(responseServiceById.status).to.equal('NOT_FOUND');
   //   expect(responseServiceById.data).to.deep.equal('Sale not found');
   });
+  afterEach(sinon.restore);
 });

@@ -23,7 +23,6 @@ const {
 chai.use(sinonChai);
 
 describe('testa as funçes da camada model', function () {
-  afterEach(sinon.restore);
   it('testa o retorno da função getAllProducts da camada model', async function () {
     sinon.stub(connection, 'execute').resolves([allProducts]);
 
@@ -52,4 +51,5 @@ describe('testa as funçes da camada model', function () {
   //   const result = await products.deleteProductById(2);
   //   expect(result).to.be.equal(true);
   // });
+  afterEach(sinon.restore);
 });
