@@ -35,7 +35,7 @@ const updateProductController = async (req, res) => {
 const productDelete = async (req, res) => {
   const { id } = req.params;
   await products.deleteProductById(Number(id));
-  res.status(204).end();
+  res.status(204).send();
 };
 
 const searchProductsController = async (req, res) => {

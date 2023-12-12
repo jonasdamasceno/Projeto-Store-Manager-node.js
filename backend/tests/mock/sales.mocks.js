@@ -80,6 +80,10 @@ const idFromDB = [
   ],
 ];
 
+const testReove = {
+  status: 204,
+  data: true,
+};
 module.exports = {
   salesMock,
   expectedResultById,
@@ -91,4 +95,5 @@ module.exports = {
   responseSalesData,
   insertSalesSucces,
   idFromDB,
+  testReove,
 };

@@ -79,15 +79,4 @@ describe('testa as funçes da camada model', function () {
   beforeEach(function () {
     sinon.restore();
   });
-  // it('testa a função deleteProductById da camada model', async function () {
-  //   sinon
-  //     .stub(connection, 'execute')
-  //     .onFirstCall(2)
-  //     .resolves(idForDelete)
-  //     .onSecondCall()
-  //     .resolves();
-
-  //   const result = await products.deleteProductById(2);
-  //   expect(result).to.be.equal(true);
-  // });
 });

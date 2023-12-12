@@ -24,13 +24,6 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 describe('testa as funçoes da camada controller', function () {
-  let res;
-  beforeEach(function () {
-    res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
-  });
   afterEach(function () {
     sinon.restore();
   });
@@ -40,6 +33,11 @@ describe('testa as funçoes da camada controller', function () {
       { id: 1, name: 'Product 1' },
       { id: 2, name: 'Product 2' },
     ];
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
     sinon.stub(services.products, 'getAllProducts').resolves(expectedResult);
     await getAllProducts(undefined, res);
 
@@ -51,6 +49,12 @@ describe('testa as funçoes da camada controller', function () {
     sinon
       .stub(services.products, 'getProductsById')
       .resolves({ status: 'SUCCESS', data: product });
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
     const req = { params: { id: 1 }, body: {} };
     await getProductsById(req, res);
     expect(res.status).to.have.been.calledWith(200);
@@ -64,6 +68,12 @@ describe('testa as funçoes da camada controller', function () {
       params: { id: '1' },
       body: { name: 'teia' },
     };
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
     await updateProductController(req, res);
     expect(res.status).to.have.calledWith(422);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
@@ -76,8 +86,14 @@ describe('testa as funçoes da camada controller', function () {
   //     params: { id: '1' },
   //     body: { name: 'Marreta' },
   //   };
-  //   await updateProductController(req, res);
-  //   expect(res.status).to.have.calledWith(200);
+
+  //   const res = {
+  //     status: sinon.stub().returnsThis(),
+  //     json: sinon.stub(),
+  //   };
+
+  //   await productsController.updateProductController(req, res);
+  //   expect(res.status).to.have.calledWith(400);
   //   expect(res.json).to.have.calledWith(sinon.match.has('message'));
   // });
   it('testa se é possivel atualizar um produto com id invalida', async function () {
@@ -88,6 +104,12 @@ describe('testa as funçoes da camada controller', function () {
       params: { id: '999' },
       body: { name: 'Marreta' },
     };
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
     await updateProductController(req, res);
     expect(res.status).to.have.calledWith(404);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
@@ -98,6 +120,12 @@ describe('testa as funçoes da camada controller', function () {
       params: {},
       body: { name: 'Marreta' },
     };
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
     await create(req, res);
     expect(res.status).to.have.calledWith(201);
     expect(res.json).to.have.calledWith(standardProduct);
@@ -110,6 +138,12 @@ describe('testa as funçoes da camada controller', function () {
       params: {},
       body: { name: 'Marreta' },
     };
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
     await create(req, res);
     expect(res.status).to.have.calledWith(400);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
@@ -122,6 +156,12 @@ describe('testa as funçoes da camada controller', function () {
       params: {},
       body: { name: 'Marreta' },
     };
+
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
     await create(req, res);
     expect(res.status).to.have.calledWith(400);
     expect(res.json).to.have.calledWith(sinon.match.has('message'));

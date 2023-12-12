@@ -8,6 +8,7 @@ const router = Router();
 
 router.get('/', salesController.getAllSales);
 router.get('/:id', salesController.getSaleById);
+router.delete('/:id', verifySaleExists, salesController.removesale);
 router.post('/', salesController.handleSalesInsertion);
 router.put(
   '/:saleId/products/:productId/quantity', 
@@ -15,7 +16,5 @@ router.put(
   validateSale,
   updateSalesProductQuantityHandler,
 );
-
-router.delete('/:id', verifySaleExists, salesController.removesale);
 
 module.exports = router;

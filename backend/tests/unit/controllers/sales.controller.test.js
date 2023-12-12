@@ -10,6 +10,7 @@ const {
   saleIdFromModelSucces,
   statusNotFoundSale,
   insertSalesSucces,
+  testReove,
 } = require('../../mock/sales.mocks');
 // const { getAllSalesService } = require('../../../src/services/sales.service');
 
@@ -77,7 +78,9 @@ describe('testa a camada controller do endpoint sales', function () {
     expect(res.json).to.have.calledWith(sinon.match.has('message'));
   });
   it('Verifica se é possivel criar novas vendas', async function () {
-    sinon.stub(salesService, 'createAndInsertSales').resolves(insertSalesSucces);
+    sinon
+      .stub(salesService, 'createAndInsertSales')
+      .resolves(insertSalesSucces);
 
     const req = {
       body: [
@@ -99,16 +102,21 @@ describe('testa a camada controller do endpoint sales', function () {
     await salesController.handleSalesInsertion(req, res);
     expect(res.status).to.have.calledWith(201);
   });
-  // it('Deve retornar o status 204 ao deletar uma venda com sucesso', async function () {
-  //   const req = {
-  //     params: {
-  //       id: 1,
-  //     },
-  //   };
-  //   const res = { sendStatus: sinon.stub().returnsThis(), json: sinon.stub() };
-  //   await salesController.removesale(req, res);
-  //   expect(res.sendStatus.calledWith(204)).to.be.equal(true);
-  // });
+  it('testa a função de deletar uma venda', async function () {
+    const req = {
+      params: {
+        id: 1,
+      },
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      end: sinon.stub(),
+    };
+    sinon.stub(salesService, 'deleteSaleById').resolves(testReove);
+    await salesController.removesale(req, res);
+    expect(res.status).to.have.been.calledWith(204);
+    expect(res.end).to.have.been.calledWith();
+  });
 
   afterEach(sinon.restore);
 });
